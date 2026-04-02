@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Dashboard | Lumina</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            padding: 120px 20px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-header h1 {
+            color: var(--text-color);
+            font-size: 2.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .events-list h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .organizer-event-card {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .organizer-event-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .event-thumb {
+            width: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .event-details {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .metrics {
+            display: flex;
+            gap: 30px;
+            text-align: center;
+            margin: 0 30px;
+        }
+
+        .metric-item .label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .metric-item .val {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-color);
+        }
+
+        .btn-edit:hover {
+            color: #f1c40f;
+            border-color: #f1c40f;
+        }
+
+        .btn-analytics:hover {
+            color: #3498db;
+            border-color: #3498db;
+        }
+
+        .btn-delete:hover {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            border-radius: 12px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .status-ACTIVE {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+
+        .status-CANCELLED {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .status-COMPLETED {
+            background: rgba(164, 176, 190, 0.2);
+            color: #a4b0be;
+        }
+
+        @media (max-width: 900px) {
+            .organizer-event-card {
+                flex-direction: column;
+            }
+
+            .event-thumb {
+                width: 100%;
+                height: 150px;
+            }
+
+            .event-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .metrics {
+                margin: 0;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">LUMINA</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#events">Events</a></li>
+                    <li><a href="create-event.html" id="nav-create-event">Create Event</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-container">
+                <a href="login.html" class="btn btn-primary" id="auth-btn">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Organizer Dashboard</h1>
+            <div>
+                <button onclick="openScannerModal()" class="btn btn-secondary" style="margin-right: 10px;"><i
+                        class="fas fa-qrcode"></i> Scan Ticket</button>
+                <a href="create-event.html" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Event</a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Events</h3>
+                <div class="value" id="stats-total-events">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Tickets Sold</h3>
+                <div class="value" id="stats-tickets-sold">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Revenue</h3>
+                <div class="value" id="stats-revenue">$0</div>
+            </div>
+        </div>
+
+        <div class="events-list">
+            <h2>My Events</h2>
+            <div id="my-events-container">
+                <p style="text-align: center; color: var(--text-muted); padding: 40px;">Loading your events...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <!-- Scanner Modal -->
+    <div id="scanner-modal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+        <div class="modal-content"
+            style="background: #1a1a1a; padding: 20px; border-radius: 12px; width: 90%; max-width: 500px; text-align: center; color: white;">
+            <span class="close-modal" onclick="closeScannerModal()"
+                style="float: right; font-size: 28px; cursor: pointer;">&times;</span>
+            <h2 style="margin-bottom: 20px;">Scan Ticket QR</h2>
+            <div id="reader" style="width: 100%;"></div>
+            <div id="scan-result" style="margin-top: 20px; font-weight: bold;"></div>
+            <button class="btn" onclick="closeScannerModal()"
+                style="margin-top: 20px; background: #444; color: white; padding: 10px 20px; border: none; border-radius: 6px;">Close</button>
+        </div>
+    </div>
+
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/organizer-dashboard.js"></script>
+</body>
+
+</html>

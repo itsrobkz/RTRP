@@ -1,0 +1,192 @@
+/* Event Details Styles */
+
+.event-banner {
+    position: relative;
+    height: 60vh;
+    width: 100%;
+    margin-top: 60px;
+    /* offset for fixed header */
+}
+
+.banner-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+    /* filter: blur(4px); */
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(13, 13, 18, 0.4), var(--bg-color));
+}
+
+.banner-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 60px;
+}
+
+.category-badge {
+    background: var(--primary-gradient);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: fit-content;
+    margin-bottom: 15px;
+}
+
+.banner-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.event-meta-hero {
+    display: flex;
+    gap: 30px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.event-meta-hero span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Page Layout */
+.event-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    margin-top: -40px;
+    /* Overlap banner */
+    position: relative;
+    padding-bottom: 80px;
+}
+
+.section {
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 10px;
+}
+
+.section p {
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+
+/* Amenities */
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+}
+
+.amenity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s;
+}
+
+.amenity:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.amenity i {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #f5576c;
+}
+
+/* Sidebar */
+.sidebar {
+    position: relative;
+}
+
+.booking-card {
+    position: sticky;
+    top: 100px;
+    padding: 30px;
+}
+
+.booking-card h3 {
+    margin-bottom: 20px;
+}
+
+.price-tag {
+    margin-bottom: 25px;
+}
+
+.price-tag .currency {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.price-tag .amount {
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+}
+
+.price-tag .per {
+    color: var(--text-muted);
+}
+
+.details-list {
+    margin-bottom: 30px;
+}
+
+.details-list .item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.details-list .label {
+    color: var(--text-muted);
+}
+
+.btn-block {
+    width: 100%;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .event-container {
+        grid-template-columns: 1fr;
+    }
+
+    .event-banner {
+        height: 50vh;
+    }
+
+    .banner-content h1 {
+        font-size: 2.5rem;
+    }
+}

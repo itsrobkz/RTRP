@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details | Lumina</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/event.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+
+    <header id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">LUMINA</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#events">Events</a></li>
+                    <li><a href="create-event.html" id="nav-create-event">Create Event</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-container">
+                <a href="login.html" class="btn btn-primary" id="auth-btn">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Event Banner -->
+    <section class="event-banner">
+        <div class="banner-bg" id="event-image"></div>
+        <div class="banner-overlay"></div>
+        <div class="container banner-content">
+            <span class="category-badge" id="event-category">Music Festival</span>
+            <h1 id="event-title">Neon Lights Festival 2026</h1>
+            <div class="event-meta-hero">
+                <span><i class="far fa-calendar"></i> <span id="event-date">March 10, 2026</span></span>
+                <span><i class="fas fa-map-marker-alt"></i> <span id="event-venue">Cyber City Arena</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Split -->
+    <div class="container event-container">
+        <div class="main-content">
+            <div class="section glass">
+                <h2>About the Event</h2>
+                <p id="event-description">
+                    Experience the most electrifying music festival of the year. Featuring top artists from around the
+                    globe,
+                    immersive light shows, and a futuristic atmosphere that will transport you to another dimension.
+                    Join thousands of music lovers for a night of unforgettable memories.
+                </p>
+                </p>
+            </div>
+
+            <!-- Map Section -->
+            <div class="section glass">
+                <h2>Location</h2>
+                <div id="map" style="height: 300px; width: 100%; border-radius: 12px; margin-top: 15px; z-index: 1;">
+                </div>
+                <p id="event-full-address" style="margin-top: 10px; color: #aaa;"></p>
+                <a id="gmaps-link" href="#" target="_blank" class="btn btn-secondary btn-sm"
+                    style="margin-top: 10px; display: inline-block;">Get Directions</a>
+            </div>
+
+            <div class="section glass">
+                <h2>Amenities</h2>
+                <div class="amenities-grid">
+                    <div class="amenity">
+                        <i class="fas fa-parking"></i>
+                        <span>Parking</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fas fa-wifi"></i>
+                        <span>Free WiFi</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fas fa-glass-cheers"></i>
+                        <span>Bar</span>
+                    </div>
+                    <div class="amenity">
+                        <i class="fas fa-wheelchair"></i>
+                        <span>Accessible</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar / Booking Ticket -->
+        <div class="sidebar">
+            <div class="booking-card glass">
+                <h3>Get Tickets</h3>
+                <div class="price-tag">
+                    <span class="currency">$</span><span class="amount" id="event-price">150</span>
+                    <span class="per">/person</span>
+                </div>
+
+                <div class="details-list">
+                    <div class="item">
+                        <span class="label">Date</span>
+                        <span class="value" id="event-date-side">Mar 10, 2026</span>
+                    </div>
+                    <div class="item">
+                        <span class="label">Time</span>
+                        <span class="value" id="event-time">18:00 PM</span>
+                    </div>
+                    <div class="item">
+                        <span class="label">Available</span>
+                        <span class="value" id="event-capacity">250 Seats</span>
+                    </div>
+                </div>
+
+                <a href="booking.html" id="book-btn" class="btn btn-primary btn-block">Book Now</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Lumina Events. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/event-details.js"></script>
+</body>
+
+</html>

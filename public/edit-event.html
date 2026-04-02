@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event | Lumina</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/create.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">LUMINA</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#events">Events</a></li>
+                    <li><a href="organizer-dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-container">
+                <a href="login.html" class="btn btn-primary" id="auth-btn">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="create-wrapper">
+        <div class="container">
+            <div class="create-card glass">
+                <h2>Edit Event</h2>
+                <p class="subtitle">Update your event details.</p>
+
+                <form id="edit-event-form">
+                    <div class="form-grid">
+                        <div class="form-group span-2">
+                            <label>Event Title</label>
+                            <input type="text" id="title" required>
+                        </div>
+
+                        <div class="form-group span-2">
+                            <label>Description</label>
+                            <textarea id="description" rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" id="time" required>
+                        </div>
+
+                        <div class="form-group span-2">
+                            <label>Location / Venue</label>
+                            <input type="text" id="location" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Price ($)</label>
+                            <input type="number" id="price" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Capacity</label>
+                            <input type="number" id="capacity" min="1" required>
+                        </div>
+
+                        <div class="form-group span-2">
+                            <label>Cover Image URL</label>
+                            <input type="url" id="imageUri" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="organizer-dashboard.html" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-lg">Update Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/edit-event.js"></script>
+</body>
+
+</html>

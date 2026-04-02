@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ticket Wallet | Lumina</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            background-color: #0f0f0f;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .wallet-container {
+            max-width: 600px;
+            margin: 100px auto 60px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .wallet-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wallet-header h1 {
+            font-size: 2rem;
+            color: var(--text-color);
+        }
+
+        .ticket-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ticket-card {
+            background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .ticket-banner {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .ticket-banner::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, #1e1e1e, transparent);
+        }
+
+        .ticket-content {
+            padding: 20px;
+            color: #fff;
+        }
+
+        .ticket-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .ticket-info {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .ticket-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+
+        .qr-placeholder {
+            width: 60px;
+            height: 60px;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .ticket-number {
+            font-family: monospace;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+        }
+
+        /* Expanded View Modal */
+        .ticket-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: white;
+            color: black;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(111, 76, 255, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-qr {
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .modal-info {
+            padding: 20px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .modal-close {
+            margin-top: 20px;
+            color: white;
+            background: transparent;
+            border: 1px solid white;
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .no-tickets {
+            text-align: center;
+            padding: 50px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">LUMINA</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="my-bookings.html">History</a></li>
+                    <li><a href="my-wallet.html" class="active">Wallet</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-container"></div>
+        </div>
+    </header>
+
+    <div class="wallet-container">
+        <div class="wallet-header">
+            <h1>Start Your Experience</h1>
+            <p>Your active entry passes</p>
+        </div>
+
+        <div id="ticket-stack" class="ticket-stack">
+            <!-- Tickets will be injected here -->
+            <div class="no-tickets">Loading tickets...</div>
+        </div>
+    </div>
+
+    <!-- Full Screen Ticket Modal -->
+    <div id="full-ticket-modal" class="ticket-modal">
+        <div class="modal-card">
+            <div class="ticket-banner" id="modal-banner" style="height: 120px;"></div>
+            <div class="modal-info">
+                <h2 id="modal-title">Event Title</h2>
+                <p id="modal-date">Date & Time</p>
+                <p id="modal-loc">Location</p>
+                <hr style="margin: 15px 0; border: 0; border-top: 1px dashed #ccc;">
+                <div class="modal-qr" id="modal-qr-container"></div>
+                <p class="ticket-number" id="modal-ticket-num">EVT-XXXX-XXXXXX</p>
+                <p style="font-size: 0.8rem; color: #777; margin-top: 10px;">Scan this code at the entrance</p>
+            </div>
+        </div>
+        <button class="modal-close" onclick="closeTicketModal()">Close Wallet</button>
+    </div>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/my-wallet.js"></script>
+</body>
+
+</html>

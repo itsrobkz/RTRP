@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | Lumina</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .bookings-container {
+            padding: 120px 20px 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .booking-card {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .date-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            min-width: 80px;
+            margin-right: 25px;
+        }
+
+        .date-badge .day {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .date-badge .month {
+            display: block;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .event-info {
+            flex: 1;
+        }
+
+        .event-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .event-info p {
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .ticket-status {
+            text-align: right;
+            min-width: 150px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status-confirmed {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+        }
+
+        .status-cancelled {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .btn-view-ticket {
+            display: inline-block;
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-view-ticket:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        /* Modal Styles */
+        .ticket-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ticket-details {
+            background: #1a1a2e;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 30px rgba(111, 76, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ticket-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 20px;
+            text-align: center;
+        }
+
+        .ticket-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .ticket-header .event-title {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        .ticket-body {
+            padding: 30px;
+        }
+
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 15px;
+        }
+
+        .ticket-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ticket-number {
+            text-align: center;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--secondary-color);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .booking-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .date-badge {
+                margin-right: 0;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                align-items: baseline;
+                padding: 10px;
+                width: 100%;
+            }
+
+            .ticket-status {
+                text-align: center;
+                margin-top: 20px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">LUMINA</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#events">Events</a></li>
+                    <!-- My Bookings link added dynamically by main.js -->
+                    <li><a href="create-event.html" id="nav-create-event">Create Event</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-container">
+                <a href="login.html" class="btn btn-primary" id="auth-btn">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="bookings-container">
+        <h1>My Bookings</h1>
+
+        <!-- Analytics Dashboard -->
+        <div class="analytics-dashboard"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            <div class="stat-card glass"
+                style="padding: 20px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 10px;">Total Bookings</h3>
+                <div id="stat-total-bookings" style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">0
+                </div>
+            </div>
+            <div class="stat-card glass"
+                style="padding: 20px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 10px;">Total Spent</h3>
+                <div id="stat-total-spent" style="font-size: 2rem; font-weight: bold; color: #2ed573;">$0</div>
+            </div>
+            <div class="stat-card glass"
+                style="padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); grid-column: span 2;">
+                <canvas id="bookingsChart" style="max-height: 200px;"></canvas>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-container"
+            style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" id="booking-search" placeholder="Search event or location..."
+                    style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: #fff;">
+            </div>
+            <div>
+                <input type="date" id="date-from"
+                    style="padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: #fff;">
+            </div>
+            <div>
+                <input type="date" id="date-to"
+                    style="padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: #fff;">
+            </div>
+            <button id="btn-filter" class="btn btn-primary" style="padding: 10px 20px;">Filter</button>
+            <button id="btn-clear" class="btn"
+                style="padding: 10px 20px; background: rgba(255,255,255,0.1); color: #fff;">Clear</button>
+        </div>
+
+        <div id="bookings-list">
+            <!-- Bookings will be dynamically inserted here -->
+            <p style="text-align: center; color: var(--text-muted);">Loading your bookings...</p>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination-controls"
+            style="display: flex; justify-content: center; gap: 15px; margin-top: 30px; align-items: center; padding-bottom: 20px;">
+            <button id="prev-page" class="btn" style="background: rgba(255,255,255,0.1); color: #fff;"
+                disabled>Previous</button>
+            <span id="page-info" style="color: var(--text-color);">Page 1 of 1</span>
+            <button id="next-page" class="btn" style="background: rgba(255,255,255,0.1); color: #fff;"
+                disabled>Next</button>
+        </div>
+    </div>
+
+    <!-- Ticket Modal -->
+    <div class="ticket-modal" id="ticket-modal">
+        <div class="ticket-details">
+            <button class="close-modal" onclick="closeTicketModal()">&times;</button>
+            <div class="ticket-header">
+                <h2>LUMINA TICKET</h2>
+                <div class="event-title" id="modal-event-title">Event Name</div>
+            </div>
+            <div class="ticket-body">
+                <div class="ticket-row">
+                    <span class="label">Date</span>
+                    <span class="value" id="modal-date">March 10, 2026</span>
+                </div>
+                <div class="ticket-row">
+                    <span class="label">Time</span>
+                    <span class="value" id="modal-time">6:00 PM</span>
+                </div>
+                <div class="ticket-row">
+                    <span class="label">Location</span>
+                    <span class="value" id="modal-location">Venue Name</span>
+                </div>
+                <div class="ticket-row">
+                    <span class="label">Seats</span>
+                    <span class="value" id="modal-seats">2</span>
+                </div>
+                <div class="ticket-row">
+                    <span class="label">Total Paid</span>
+                    <span class="value" id="modal-price">$300</span>
+                </div>
+
+                <div class="ticket-number" id="modal-ticket-num">EVT-2026-000123</div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" id="btn-download-pdf" style="flex: 1; font-size: 0.9rem;">
+                        <i class="fas fa-download"></i> PDF
+                    </button>
+                    <button class="btn" id="btn-cancel-booking"
+                        style="flex: 1; font-size: 0.9rem; background: rgba(255, 71, 87, 0.2); color: #ff4757; border: 1px solid #ff4757; display: none;">
+                        Cancel
+                    </button>
+                    <button class="btn" id="btn-request-refund"
+                        style="flex: 1; font-size: 0.9rem; background: rgba(255, 159, 67, 0.2); color: #ff9f43; border: 1px solid #ff9f43; display: none;">
+                        Request Refund
+                    </button>
+                </div>
+                <div id="refund-status-msg"
+                    style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: var(--text-muted); display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/my-bookings.js"></script>
+</body>
+
+</html>
